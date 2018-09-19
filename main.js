@@ -34,7 +34,7 @@ function createWindow () {
   }
 
   // associated viewer
-  const rootUrl = `file://${__dirname}/dwv-jqmobile-0.2.0/index.html`
+  const rootUrl = `file://${__dirname}/viewer/index.html`
 
   // parse command line to get file list
   let inputUrl = ""

@@ -9,8 +9,8 @@ dwv-jqmobile-electron is not certified for diagnostic use. Released under GNU GP
 ## Available Scripts
 
 ``` bash
-# first time: download dwv-jqmobile dependencies
-cd dwv-jqmobile-0.2.0
+# first time: download viewer dependencies
+cd viewer
 yarn install
 
 # install dependencies
