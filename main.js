@@ -1,5 +1,14 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
+const log = require('electron-log')
+const argv = require('yargs')
+    .usage('Standalone medical image viewer using dwv. \n\nUsage: dwv-jqmobile-electron [files] [options]')
+    .boolean('d')
+    .alias('d', 'dev')
+    .describe('d', 'Run with dev tools')
+    .alias('h', 'help')
+    .example('dwv-jqmobile-electron file1.dcm file2.dcm')
+    .parse(process.argv.slice(1))
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -8,47 +17,52 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
-  mainWindow.setMenu(null);
+  mainWindow.setMenu(null)
 
-  // debug
-  //mainWindow.webContents.openDevTools()
+  // Open the DevTools if dev mode.
+  if (argv.dev) {
+    mainWindow.webContents.openDevTools()
+  }
 
-  const devIncr = process.argv.indexOf('--dev') != -1 ? 2 : 0
+  // input file list
+  let fileList = argv._
+  if (fileList.length !== 0 && fileList[0] === ".") {
+    fileList = fileList.slice(1)
+  }
+  if (fileList.length !== 0) {
+    log.debug('fileList', fileList)
+  }
 
-  //const rootUrl = `file://${__dirname}/dwv-simplistic-0.2.0/index.html`
+  // associated viewer
   const rootUrl = `file://${__dirname}/dwv-jqmobile-0.2.0/index.html`
 
+  // parse command line to get file list
   let inputUrl = ""
-  if (process.argv.length > devIncr) {
+  if (fileList.length !== 0) {
     inputUrl += "?input="
     let inputQuery = ""
-    const startIndex = 1 + devIncr;
-    const isOneFile = startIndex === process.argv.length - 1
+    const isOneFile = fileList.length === 1
     if (!isOneFile) {
       inputQuery += "?file="
     }
-    for (let i = startIndex; i < process.argv.length; ++i) {
-      if (i !== startIndex) {
+    for (let i = 0; i < fileList.length; ++i) {
+      if (i !== 0) {
         inputQuery += "&file="
       }
-      inputQuery += process.argv[i]
+      inputQuery += fileList[i]
     }
     inputUrl += encodeURIComponent(inputQuery)
     if (!isOneFile) {
       inputUrl += "&dwvReplaceMode=void"
     }
   }
-  console.log('inputUrl', inputUrl)
-
-  //const dwv = require('dwv')
+  if (inputUrl.length !== 0) {
+    log.debug('inputUrl', inputUrl)
+  }
 
   // and load the index.html of the app.
   //mainWindow.loadFile('dwv-simplistic-0.2.0/index.html')
   mainWindow.loadURL(rootUrl+inputUrl)
-
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -59,8 +73,7 @@ function createWindow () {
   })
 }
 
-
-// Handle multiple instances...
+// TODO Handle multiple instances...
 //
 /*const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {

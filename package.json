@@ -4,19 +4,22 @@
   "description": "dwv-jqmobile wrapped with Electronjs",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --dev",
+    "start": "electron .",
     "package": "electron-packager ./ --out ./build --overwrite"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "DICOM",
+    "medical",
+    "imaging",
+    "Electron"
   ],
-  "author": "ivmartel",
-  "license": "CC0-1.0",
+  "author": "ivmartel <ivmartel@gmail.com>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "yargs": "^12.0.2",
+    "electron-log": "^2.2.17"
+  },
   "devDependencies": {
     "electron": "^2.0.0",
     "electron-packager": "^12.0.0"
